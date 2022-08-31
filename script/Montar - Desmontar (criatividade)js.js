@@ -19,7 +19,6 @@ if (isGM) {
 const mountFlag = tokenRider.document.getFlag("world", "mounted");
 
 if (mountFlag === undefined || mountFlag == 0) {
-
     async function montar(mountId) {
         let carriedWeight = tokenRider.actor.data.flags["variant-encumbrance-dnd5e"].data.totalWeightToDisplay
         let totalWeight = carriedWeight + await getActorWeight(tokenRider.actor);
@@ -129,6 +128,7 @@ if (mountFlag == 1) {
         let itemId = mountActor.data.items.find(t => t.name == tokenN).id;
         mountActor.deleteEmbeddedDocuments("Item", [itemId]);
     }
+    
     let mountId = tokenRider.document.getFlag("world", "mountId");
     await tokenRider.document.setFlag("world", "mounted", "0");
     deleteItemRider(tokenRider.data.name, mountId);
