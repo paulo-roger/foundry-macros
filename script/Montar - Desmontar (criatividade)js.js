@@ -3,11 +3,11 @@ const isGM = game.users.get(game.userId).hasRole(4);
 if (isGM) {
     token = canvas.tokens.controlled[0];
     if (token == null) {
-        ui.notifications.warn("Por favor selecione um Token de tamanho médio.");
+        ui.notifications.warn("Por favor selecione um token de tamanho médio.");
         return;
     }
     else if (token.actor.data.data.traits.size === "lg") {
-        ui.notifications.warn("Por favor selecione um Token de tamanho médio.");
+        ui.notifications.warn("Por favor selecione um token de tamanho médio.");
         return;
     }
 } if (!isGM) {
