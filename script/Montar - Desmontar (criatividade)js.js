@@ -1,31 +1,32 @@
-var token = 0;
+var tokenRider = 0;
 const isGM = game.users.get(game.userId).hasRole(4);
 
 if (isGM) {
-    token = canvas.tokens.controlled[0];
+    tokenRider = canvas.tokens.controlled[0];
     if (token == null) {
         ui.notifications.warn("Por favor selecione um token de tamanho médio.");
         return;
     }
-    else if (token.actor.data.data.traits.size === "lg") {
+    else if (tokenRider.actor.data.data.traits.size === "lg") {
         ui.notifications.warn("Por favor selecione um token de tamanho médio.");
         return;
     }
 } if (!isGM) {
-    const playerTokenName = game.user.character.data.token.name
-    token = canvas.tokens.objects.getChildByName(playerTokenName)
+    let playerTokenName = game.user.character.data.token.name
+    tokenRider = canvas.tokens.objects.getChildByName(playerTokenName)
 }
 
-const mountFlag = token.document.getFlag("world", "mounted");
+const mountFlag = tokenRider.document.getFlag("world", "mounted");
 
 if (mountFlag === undefined || mountFlag == 0) {
+
     async function montar(mountId) {
-        let carriedWeight = token.actor.data.flags["variant-encumbrance-dnd5e"].data.totalWeightToDisplay
-        let totalWeight = carriedWeight + await getActorWeight(token.actor);
-        await token.document.setFlag("world", "mounted", "1");
-        await token.document.setFlag("world", "mountId", mountId);
-        MountUp.mount(token.document.id, mountId);
-        await createItemRider(token.actor.data.img, token.data.name, totalWeight, mountId);
+        let carriedWeight = tokenRider.actor.data.flags["variant-encumbrance-dnd5e"].data.totalWeightToDisplay
+        let totalWeight = carriedWeight + await getActorWeight(tokenRider.actor);
+        await tokenRider.document.setFlag("world", "mounted", "1");
+        await tokenRider.document.setFlag("world", "mountId", mountId);
+        MountUp.mount(tokenRider.document.id, mountId);
+        await createItemRider(tokenRider.actor.data.img, tokenRider.data.name, totalWeight, mountId);
     }
 
     async function vacancyCheck(mountId, numberRiders) {
@@ -128,10 +129,9 @@ if (mountFlag == 1) {
         let itemId = mountActor.data.items.find(t => t.name == tokenN).id;
         mountActor.deleteEmbeddedDocuments("Item", [itemId]);
     }
-
-    let mountId = token.document.getFlag("world", "mountId");
-    await token.document.setFlag("world", "mounted", "0");
-    deleteItemRider(token.data.name, mountId);
+    let mountId = tokenRider.document.getFlag("world", "mountId");
+    await tokenRider.document.setFlag("world", "mounted", "0");
+    deleteItemRider(tokenRider.data.name, mountId);
     ui.notifications.info("Montaria liberada.");
-    MountUp.dismount(token.document.id);
+    MountUp.dismount(tokenRider.document.id);
 }
