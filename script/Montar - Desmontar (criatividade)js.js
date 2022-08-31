@@ -1,5 +1,6 @@
 var token = 0;
 const isGM = game.users.get(game.userId).hasRole(4);
+
 if (isGM) {
     token = canvas.tokens.controlled[0];
     if (token == null) {
@@ -14,9 +15,10 @@ if (isGM) {
     const playerTokenName = game.user.character.data.token.name
     token = canvas.tokens.objects.getChildByName(playerTokenName)
 }
-const mountFlag = token.document.getFlag("world", "mounted");
-if (mountFlag === undefined || mountFlag == 0) {
 
+const mountFlag = token.document.getFlag("world", "mounted");
+
+if (mountFlag === undefined || mountFlag == 0) {
     async function montar(mountId) {
         let carriedWeight = token.actor.data.flags["variant-encumbrance-dnd5e"].data.totalWeightToDisplay
         let totalWeight = carriedWeight + await getActorWeight(token.actor);
@@ -55,13 +57,6 @@ if (mountFlag === undefined || mountFlag == 0) {
         
     }
 
-    let selectMounts = '<form><div class="form-group"><label>Escolha uma montaria: </label><select id="mounts">';
-    canvas.tokens.placeables.filter(f => f.actor.data.data.traits.size === "lg" && f.data.disposition === 1).forEach(function (mounts) {
-        let optMount = '<option value="' + mounts.document.id + '">' + mounts.document.name + '</option>';
-        selectMounts += optMount;
-    });
-    selectMounts += '</select></div></form>'
-
     async function getItem(actor, itemName) {
         let itemObject = actor.data.items.find(t => t.name == itemName);
         return itemObject;
@@ -92,6 +87,13 @@ if (mountFlag === undefined || mountFlag == 0) {
             }
         }
     }
+
+    let selectMounts = '<form><div class="form-group"><label>Escolha uma montaria: </label><select id="mounts">';
+    canvas.tokens.placeables.filter(f => f.actor.data.data.traits.size === "lg" && f.data.disposition === 1).forEach(function (mounts) {
+        let optMount = '<option value="' + mounts.document.id + '">' + mounts.document.name + '</option>';
+        selectMounts += optMount;
+    });
+    selectMounts += '</select></div></form>'
 
     new Dialog({
         title: "Montarias",
